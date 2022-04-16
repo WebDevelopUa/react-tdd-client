@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "TDD Client",
+  "name": "Test driven development - client React App",
   "icons": [
     {
       "src": "favicon.ico",

@@ -17,3 +17,7 @@ npm i
 npm run start
 npm run test
 ````
+
+--------------
+
+* [Advanced Configuration]()https://create-react-app.dev/docs/advanced-configuration/
