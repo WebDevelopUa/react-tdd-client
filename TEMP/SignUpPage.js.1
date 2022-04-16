@@ -8,26 +8,24 @@ function SignUpPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    function onChange(e) {
-        const {id, value} = e.target;
-        switch (id) {
-            case 'username':
-                setUsername(value);
-                break;
-            case 'email':
-                setEmail(value);
-                break;
-            case 'password':
-                setPassword(value);
-                setButtonDisabled(value !== confirmPassword);
-                break;
-            case 'confirmPassword':
-                setConfirmPassword(value);
-                setButtonDisabled(value !== password);
-                break;
-            default:
-                console.log(`default: ${id} : ${value}`);
-        }
+
+
+    function onChangeUsername(e) {
+        setUsername(e.target.value);
+    }
+
+    function onChangeEmail(e) {
+        setEmail(e.target.value);
+    }
+
+    function onChangePassword(e) {
+        setPassword(e.target.value);
+        setButtonDisabled(e.target.value !== confirmPassword);
+    }
+
+    function onChangeConfirmPassword(e) {
+        setConfirmPassword(e.target.value);
+        setButtonDisabled(e.target.value !== password);
     }
 
     async function onFormSubmit(e) {
@@ -40,7 +38,7 @@ function SignUpPage() {
                 username, email, password
             }
         )
-        console.log('Submitted!');
+         console.log('Submitted!');
     }
 
     return <form>
@@ -48,30 +46,44 @@ function SignUpPage() {
         <label htmlFor="username">Username </label><br/>
         <input id="username"
                placeholder="username"
-               onChange={onChange}/>
-        <br/> <br/>
+               onChange={onChangeUsername}/>
+
+        <br/>
+        <br/>
+
         <label htmlFor="email">Email </label><br/>
         <input id="email"
                placeholder="email"
-               onChange={onChange}/>
-        <br/> <br/>
+               onChange={onChangeEmail}/>
+
+        <br/>
+        <br/>
+
         <label htmlFor="password">Password </label><br/>
         <input id="password"
                placeholder="password"
                type="password"
-               onChange={onChange}/>
-        <br/> <br/>
+               onChange={onChangePassword}/>
+
+        <br/>
+        <br/>
+
         <label htmlFor="confirmPassword">Confirm Password </label><br/>
         <input id="confirmPassword"
                placeholder="confirm password"
                type="password"
-               onChange={onChange}/>
-        <br/> <br/>
+               onChange={onChangeConfirmPassword}/>
+
+        <br/>
+        <br/>
+
         <button disabled={isButtonDisabled}
                 onClick={onFormSubmit}>
             Sign Up
         </button>
+
     </form>
 }
+
 
 export default SignUpPage;
