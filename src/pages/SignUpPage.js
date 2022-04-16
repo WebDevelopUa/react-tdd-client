@@ -1,34 +1,61 @@
-const SignUpPage = () => <>
-    <h1>Sign Up</h1>
-    <label htmlFor="username">Username</label>
-    <input id="username" placeholder="username"/>
+import React, {useState} from 'react';
 
-    <br/>
+function SignUpPage() {
+    const [isButtonDisabled, setButtonDisabled] = useState(true);
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
-    <label htmlFor="email">Email</label>
-    <input id="email" placeholder="email"/>
+    // setTimeout(() => setButtonDisabled(true), 5000);
 
-    <br/>
+    function onChangePassword(e) {
+        setPassword(e.target.value);
+        setButtonDisabled(e.target.value !== confirmPassword);
+    }
 
-    <label htmlFor="password">Password</label>
-    <input id="password"
-           placeholder="password"
-           type="password"
-    />
+    function onChangeConfirmPassword(e) {
+        setConfirmPassword(e.target.value);
+        setButtonDisabled(e.target.value !== password);
+    }
 
-    <br/>
+    function onFormSubmit() {
+        console.log('Submitted!');
+    }
 
-    <label htmlFor="confirmPassword">Confirm Password</label>
-    <input id="confirmPassword"
-           placeholder="confirm password"
-           type="password"
-    />
+    return <>
+        <h1>Sign Up</h1>
+        <label htmlFor="username">Username</label>
+        <input id="username" placeholder="username"/>
 
-    <br/>
+        <br/>
 
-    <button disabled>Sign Up</button>
+        <label htmlFor="email">Email</label>
+        <input id="email" placeholder="email"/>
 
-</>
+        <br/>
+
+        <label htmlFor="password">Password</label>
+        <input id="password"
+               placeholder="password"
+               type="password"
+               onChange={onChangePassword}/>
+
+        <br/>
+
+        <label htmlFor="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword"
+               placeholder="confirm password"
+               type="password"
+               onChange={onChangeConfirmPassword}/>
+
+        <br/>
+
+        <button disabled={isButtonDisabled}
+                onClick={onFormSubmit}>
+            Sign Up
+        </button>
+
+    </>
+}
 
 
 export default SignUpPage;

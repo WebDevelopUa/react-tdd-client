@@ -1,8 +1,12 @@
-import {render, screen} from "@testing-library/react";
 import '@testing-library/jest-dom'
+import {render, screen} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import SignUpPage from "../pages/SignUpPage";
 
+// SIGN UP PAGE TESTS
 describe("Sign Up Page:", () => {
+
+    // LAYOUT
     describe("Layout:", () => {
 
         it("1) has header", () => {
@@ -68,6 +72,22 @@ describe("Sign Up Page:", () => {
             const button = screen.queryByRole("button", {name: "Sign Up"});
             expect(button).toBeDisabled();
         })
+
+    })
+
+    // INTERACTIONS
+    describe("Interactions", () => {
+
+        it("11) enables the button when password + confirm password fields have the same values", () => {
+            render(<SignUpPage/>)
+            const button = screen.queryByRole("button", {name: "Sign Up"});
+            const passwordInput = screen.getByLabelText("6t654dfytvye5");
+            const passwordConfirmInput = screen.getByLabelText('6t654dfytvye5');
+            userEvent.type(passwordInput, "Password");
+            userEvent.type(passwordConfirmInput, "Confirm Password");
+            expect(button).toBeEnabled();
+        })
+
 
     })
 })
