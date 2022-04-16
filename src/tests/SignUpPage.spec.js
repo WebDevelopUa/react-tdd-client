@@ -2,6 +2,7 @@ import '@testing-library/jest-dom'
 import {render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SignUpPage from "../pages/SignUpPage";
+import axios from "axios";
 
 // SIGN UP PAGE TESTS
 describe("Sign Up Page:", () => {
@@ -81,11 +82,46 @@ describe("Sign Up Page:", () => {
         it("11) enables the button when password + confirm password fields have the same values", () => {
             render(<SignUpPage/>)
             const button = screen.queryByRole("button", {name: "Sign Up"});
-            const passwordInput = screen.getByLabelText("6t654dfytvye5");
-            const passwordConfirmInput = screen.getByLabelText('6t654dfytvye5');
-            userEvent.type(passwordInput, "Password");
-            userEvent.type(passwordConfirmInput, "Confirm Password");
+            const passwordInput = screen.getByLabelText("Password");
+            const passwordConfirmInput = screen.getByLabelText("Confirm Password");
+
+            userEvent.type(passwordInput, "44555");
+            userEvent.type(passwordConfirmInput, "44555");
             expect(button).toBeEnabled();
+        })
+
+
+        it("12) sends username + email + password to backend on Submit button clicked", () => {
+            render(<SignUpPage/>)
+
+            const usernameInput = screen.getByPlaceholderText("username");
+            const emailInput = screen.getByPlaceholderText("email");
+            const passwordInput = screen.getByLabelText("Password");
+            const passwordConfirmInput = screen.getByLabelText("Confirm Password");
+            const button = screen.queryByRole("button", {name: "Sign Up"});
+
+            userEvent.type(usernameInput, "tom");
+            userEvent.type(emailInput, "tom@gmail.dom");
+            userEvent.type(passwordInput, "Axxx!55355");
+            userEvent.type(passwordConfirmInput, "Axxx!55355");
+
+            const mockFn = jest.fn();
+            axios.post = mockFn;
+
+            userEvent.click(button);
+
+            // axios.post(url[0], body[1])
+            const firstCallOfMockFunction = mockFn.mock.calls[0];
+            const body = firstCallOfMockFunction[1];
+
+            expect(body).toEqual(
+                {
+                    username: "tom",
+                    email: "tom@gmail.dom",
+                    password: "Axxx!55355",
+                }
+            )
+
         })
 
 
