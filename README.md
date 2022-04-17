@@ -24,6 +24,7 @@ npm run test
 
 * [Advanced Configuration]()https://create-react-app.dev/docs/advanced-configuration/
 * [Proxy](https://create-react-app.dev/docs/proxying-api-requests-in-development/)
+* [API mocking of the next generation](https://mswjs.io/) - ``` npm i -D msw ```
 
 ---------- 
 
