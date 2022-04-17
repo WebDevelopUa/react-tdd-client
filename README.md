@@ -5,6 +5,8 @@
 * [http://localhost:3030](http://localhost:3030) - set `"proxy": "http://localhost:3000"` for Server
   in [package.json](package.json)
 * [ENDPOINT 1](http://localhost:3000/api/1.0/users) - `{"content":[],"page":0,"size":10,"totalPages":0}`
+* [ENDPOINT 2](http://127.0.0.1:3030/api/1.0/users)
+* [ENDPOINT 3](http://127.0.0.1:3000/api/1.0/users) - OK
 
 -------------------
 

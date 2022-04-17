@@ -91,41 +91,7 @@ describe("Sign Up Page:", () => {
         })
 
 
-        // it("12) sends username + email + password to backend on Submit button clicked with axios", () => {
-        //     render(<SignUpPage/>)
-        //
-        //     const usernameInput = screen.getByPlaceholderText("username");
-        //     const emailInput = screen.getByPlaceholderText("email");
-        //     const passwordInput = screen.getByLabelText("Password");
-        //     const passwordConfirmInput = screen.getByLabelText("Confirm Password");
-        //     const button = screen.queryByRole("button", {name: "Sign Up"});
-        //
-        //     userEvent.type(usernameInput, "tom");
-        //     userEvent.type(emailInput, "tom@gmail.dom");
-        //     userEvent.type(passwordInput, "Axxx!55355");
-        //     userEvent.type(passwordConfirmInput, "Axxx!55355");
-        //
-        //     const mockFn = jest.fn();
-        //     axios.post = mockFn;
-        //
-        //     userEvent.click(button);
-        //
-        //     // axios.post(url[0], body[1])
-        //     const firstCallOfMockFunction = mockFn.mock.calls[0];
-        //     const body = firstCallOfMockFunction[1];
-        //
-        //     expect(body).toEqual(
-        //         {
-        //             username: "tom",
-        //             email: "tom@gmail.dom",
-        //             password: "Axxx!55355",
-        //         }
-        //     )
-        //
-        // })
-
-
-        it("13) sends username + email + password to backend on Submit button clicked with fetch", () => {
+        it("12) sends username + email + password to backend on Submit button clicked", () => {
             render(<SignUpPage/>)
 
             const usernameInput = screen.getByPlaceholderText("username");
@@ -140,13 +106,13 @@ describe("Sign Up Page:", () => {
             userEvent.type(passwordConfirmInput, "Axxx!55355");
 
             const mockFn = jest.fn();
-            window.fetch = mockFn;
+            axios.post = mockFn;
 
             userEvent.click(button);
 
-            // fetch("/api/1.0/users" [0], {method: 'POST', headers: {}, body: JSON.stringify({})} [1]);
+            // axios.post(url[0], body[1])
             const firstCallOfMockFunction = mockFn.mock.calls[0];
-            const body = JSON.parse(firstCallOfMockFunction[1].body);
+            const body = firstCallOfMockFunction[1];
 
             expect(body).toEqual(
                 {
