@@ -26,6 +26,7 @@ npm run test
 * [Proxy](https://create-react-app.dev/docs/proxying-api-requests-in-development/)
 * [API mocking of the next generation](https://mswjs.io/) - ``` npm i -D msw ```
 * [mswjs / examples](https://github.com/mswjs/examples/tree/master/examples/rest-react)
+* [setupServer()](https://mswjs.io/docs/api/setup-server)
 
 ---------- 
 

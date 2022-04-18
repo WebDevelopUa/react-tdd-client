@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-// import axios from "axios";
+import axios from "axios";
 import Container from 'react-bootstrap/Container';
 import {Button, Form} from 'react-bootstrap';
 
@@ -39,38 +39,38 @@ function SignUpPage() {
 
         try {
             // const response = await axios.post(
-            //     "http://127.0.0.1:3000/api/1.0/users",
+            //     "/api/1.0/users",
+            //     // "http://127.0.0.1:3000/api/1.0/users",
             //     // "http://localhost:3000/api/1.0/users",
             //     // "http://localhost:3030/api/1.0/users",
             //     // "http://127.0.0.1:3030/api/1.0/users",
-            //     // "/api/1.0/users",
             //     {
             //         username, email, password
             //     }
-            // )
+            // );
+            // const result = response;
 
             const params = {
                 headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                method: 'POST',
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password,
+                    Accept: 'application/json', 'Content-Type': 'application/json',
+                }, method: 'POST', body: JSON.stringify({
+                    username, email, password,
                 })
             }
-
             const response = await fetch(
-                "http://127.0.0.1:3000/api/1.0/users",
-                params
-            );
+                "/api/1.0/users",
+                // "http://127.0.0.1:3000/api/1.0/users",
+                params,);
+            const result = await response.json();
 
-            setInfo(`Submitted, ${response ? JSON.stringify(response.body) : ''}`)
-            console.log(`Submitted, ${response ? JSON.stringify(response) : ''}`);
+            console.log('Submitted:', JSON.stringify(result));
+            setInfo(`Submitted:, ${JSON.stringify(result)}`);
+
+            return result;
         } catch (e) {
-            setInfo(`${e ? e : ''}`)
+            setInfo(`Error`)
+            console.error('e');
+            return 'error';
         }
 
     }
