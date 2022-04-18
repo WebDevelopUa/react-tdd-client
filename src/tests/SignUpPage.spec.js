@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SignUpPage from "../pages/SignUpPage";
-// import axios from "axios";
+import axios from "axios";
 import {rest} from 'msw';
 import {setupServer} from "msw/node";
 
@@ -80,6 +80,16 @@ describe("Sign Up Page:", () => {
 
     // INTERACTIONS
     describe("Interactions", () => {
+        let button;
+        let requestBody;
+        let server = setupServer(
+            rest.post('/api/1.0/users'), (req, res, ctx) => {
+                requestBody = req.body;
+                return res(ctx.status(200));
+            });
+
+        beforeAll(() => server.listen());
+        afterAll(() => server.close());
 
         const setup = () => {
             render(<SignUpPage/>);
@@ -88,11 +98,13 @@ describe("Sign Up Page:", () => {
             const emailInput = screen.getByPlaceholderText("email");
             const passwordInput = screen.getByLabelText("Password");
             const passwordConfirmInput = screen.getByLabelText("Confirm Password");
+            const button = screen.queryByRole("button", {name: "Sign Up"});
 
             userEvent.type(usernameInput, "tom");
             userEvent.type(emailInput, "tom@gmail.com");
             userEvent.type(passwordInput, "Axxx!553551100");
             userEvent.type(passwordConfirmInput, "Axxx!553551100");
+            userEvent.click(button);
         }
 
         it("11) enables the button when password + confirm password fields have the same values", () => {
@@ -106,38 +118,38 @@ describe("Sign Up Page:", () => {
             expect(button).toBeEnabled();
         })
 
-        // it("12) sends username + email + password to backend on Submit button clicked with axios", () => {
-        //     render(<SignUpPage/>)
-        //
-        //     const usernameInput = screen.getByPlaceholderText("username");
-        //     const emailInput = screen.getByPlaceholderText("email");
-        //     const passwordInput = screen.getByLabelText("Password");
-        //     const passwordConfirmInput = screen.getByLabelText("Confirm Password");
-        //     const button = screen.queryByRole("button", {name: "Sign Up"});
-        //
-        //     userEvent.type(usernameInput, "tom");
-        //     userEvent.type(emailInput, "tom@gmail.dom");
-        //     userEvent.type(passwordInput, "Axxx!55355");
-        //     userEvent.type(passwordConfirmInput, "Axxx!55355");
-        //
-        //     const mockFn = jest.fn();
-        //     axios.post = mockFn;
-        //
-        //     userEvent.click(button);
-        //
-        //     // axios.post(url[0], body[1])
-        //     const firstCallOfMockFunction = mockFn.mock.calls[0];
-        //     const body = firstCallOfMockFunction[1];
-        //
-        //     expect(body).toEqual(
-        //         {
-        //             username: "tom",
-        //             email: "tom@gmail.dom",
-        //             password: "Axxx!55355",
-        //         }
-        //     )
-        //
-        // })
+        it("12) sends username + email + password to backend on Submit button clicked with axios", () => {
+            render(<SignUpPage/>)
+
+            const usernameInput = screen.getByPlaceholderText("username");
+            const emailInput = screen.getByPlaceholderText("email");
+            const passwordInput = screen.getByLabelText("Password");
+            const passwordConfirmInput = screen.getByLabelText("Confirm Password");
+            const button = screen.queryByRole("button", {name: "Sign Up"});
+
+            userEvent.type(usernameInput, "tom");
+            userEvent.type(emailInput, "tom@gmail.dom");
+            userEvent.type(passwordInput, "Axxx!55355");
+            userEvent.type(passwordConfirmInput, "Axxx!55355");
+
+            const mockFn = jest.fn();
+            axios.post = mockFn;
+
+            userEvent.click(button);
+
+            // axios.post(url[0], body[1])
+            const firstCallOfMockFunction = mockFn.mock.calls[0];
+            const body = firstCallOfMockFunction[1];
+
+            expect(body).toEqual(
+                {
+                    username: "tom",
+                    email: "tom@gmail.dom",
+                    password: "Axxx!55355",
+                }
+            )
+
+        })
 
         it("13) sends username + email + password to backend on Submit button clicked with fetch", async () => {
 
@@ -163,44 +175,67 @@ describe("Sign Up Page:", () => {
 
         })
 
-        it("14) sends username + email + password to backend on Submit button clicked with Mock Service Worker", async () => {
-            let server = setupServer(
-                // Describe the requests to mock
-                rest.post('/api/1.0/users'), (req, res, ctx) => {
-                    return res((res) => {
-                        return sessionStorage.setItem('res', res);
-                    })
-                });
+        // it("14) sends username + email + password to backend on Submit button clicked with Mock Service Worker", async () => {
+        //     let server = setupServer(
+        //         // Describe the requests to mock
+        //         rest.post('/api/1.0/users'), (req, res, ctx) => {
+        //             return res((res) => {
+        //                 return sessionStorage.setItem('res', res);
+        //             })
+        //         });
+        //
+        //     await server.listen();
+        //
+        //     render(<SignUpPage/>);
+        //
+        //     const usernameInput = screen.getByPlaceholderText("username");
+        //     const emailInput = screen.getByPlaceholderText("email");
+        //     const passwordInput = screen.getByLabelText("Password");
+        //     const passwordConfirmInput = screen.getByLabelText("Confirm Password");
+        //
+        //     userEvent.type(usernameInput, "tom");
+        //     userEvent.type(emailInput, "tom110110cc@gmail.com");
+        //     userEvent.type(passwordInput, "Axxx!5535511001cc");
+        //     userEvent.type(passwordConfirmInput, "Axxx!5535511001cc");
+        //
+        //     let button = screen.getByRole("button", {name: "Sign Up"});
+        //     userEvent.click(button);
+        //     fireEvent.click(button);
+        //     // expect(button).toBeInTheDocument();
+        //
+        //     await new Promise(resolve => setTimeout(resolve, 1500));
+        //
+        //     await waitFor(() => {
+        //         expect(sessionStorage.getItem('res')).toEqual(
+        //             {
+        //                 username: "tom",
+        //                 email: "tomssss@gmail.com",
+        //                 password: "Axxx!55355a"
+        //             })
+        //     })
+        // })
 
-            await server.listen();
-
-            render(<SignUpPage/>);
-
-            const usernameInput = screen.getByPlaceholderText("username");
-            const emailInput = screen.getByPlaceholderText("email");
-            const passwordInput = screen.getByLabelText("Password");
-            const passwordConfirmInput = screen.getByLabelText("Confirm Password");
-
-            userEvent.type(usernameInput, "tom");
-            userEvent.type(emailInput, "tom110110cc@gmail.com");
-            userEvent.type(passwordInput, "Axxx!5535511001cc");
-            userEvent.type(passwordConfirmInput, "Axxx!5535511001cc");
+        fit("15) sends username + email + password to backend on Submit button clicked with Mock Service Worker", async () => {
+            setup();
 
             let button = screen.getByRole("button", {name: "Sign Up"});
             userEvent.click(button);
-            fireEvent.click(button);
-            // expect(button).toBeInTheDocument();
 
             await new Promise(resolve => setTimeout(resolve, 1500));
 
-            await waitFor(() => {
-                expect(sessionStorage.getItem('res')).toEqual(
-                    {
-                        username: "tom",
-                        email: "tomssss@gmail.com",
-                        password: "Axxx!55355a"
-                    })
-            })
+            expect(requestBody).toEqual(
+                {
+                    username: "tom",
+                    email: "tomssss@gmail.com",
+                    password: "Axxx!55355a"
+                })
+
+        })
+
+        fit("16) enables the button when password + confirm password fields have the same values", () => {
+            setup();
+            const button = screen.queryByRole("button", {name: "Sign Up"});
+            expect(button).toBeEnabled();
         })
 
 
